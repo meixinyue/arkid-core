@@ -4,6 +4,7 @@ urls of apis
 # pylint: disable=invalid-name
 
 from django.conf.urls import url, include
+from django.urls import path
 
 from siteapi.v1.views.task import (
     ImportDingAPIView,
@@ -37,6 +38,8 @@ from siteapi.v1.views import (
 )
 
 from siteapi.v1.views.statistics import UserStatisticView
+from siteapi.v1.views.view_filter import MetaAPIView
+
 
 urlpatterns = [
     # user
@@ -141,6 +144,7 @@ urlpatterns = [
     url(r'^meta/node/$', node_views.MetaNodeAPIView.as_view(), name='meta_node'),
     url(r'^meta/log/$', log_views.MetaLogAPIView.as_view(), name='meta_log'),
     url(r'^meta/perm/$', perm_views.MetaPermAPIView.as_view(), name='meta_perm'),
+    path('meta/api/<path:api_path>/', MetaAPIView.as_view(), name="meta_api"),
     # app
     url(r'^app/$', app_views.APPListCreateAPIView.as_view(), name='app_list'),
     url(r'^app/(?P<uid>[\w|-]+)/$', app_views.APPDetailAPIView.as_view(), name='app_detail'),

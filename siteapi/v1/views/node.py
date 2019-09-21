@@ -21,6 +21,8 @@ from siteapi.v1.views import (
 from siteapi.v1.serializers.dept import DeptTreeSerializer, DeptSerializer
 from siteapi.v1.serializers.group import GroupTreeSerializer, GroupSerializer
 from oneid.permissions import IsAdminUser, IsManagerUser, NodeEmployeeReadable
+from siteapi.v1.views.view_filter import ViewFilter
+
 
 
 class MetaNodeAPIView(APIView):
@@ -287,7 +289,7 @@ class NodeChildNodeAPIView(APIView):
         raise ValidationError({'uid': 'this field must start with `d_` or `g_`'})
 
 
-class NodeChildUserAPIView(APIView):
+class NodeChildUserAPIView(APIView, ViewFilter):
     '''
     节点下属成员
     '''
@@ -305,6 +307,20 @@ class NodeChildUserAPIView(APIView):
             return group_view.GroupChildUserAPIView().dispatch(request, *args, **kwargs)
         raise ValidationError({'uid': 'this field must start with `d_` or `g_`'})
 
+    @classmethod
+    def get_query_item(cls):
+        return [
+            {
+                'type': 'text',
+                'name': '姓名',
+                'key': 'name',
+            },
+            {
+                'type': 'number',
+                'name': '年龄',
+                'key': 'id',
+            },
+        ]
 
 class NodePermAPIView(APIView):
     '''
