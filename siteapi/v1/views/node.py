@@ -309,6 +309,7 @@ class NodeChildUserAPIView(APIView, ViewFilter):
 
     @classmethod
     def get_query_item(cls):
+        """返回该view支持的filter字段及类型"""
         return [
             {
                 'type': 'text',
@@ -316,9 +317,14 @@ class NodeChildUserAPIView(APIView, ViewFilter):
                 'key': 'name',
             },
             {
-                'type': 'number',
-                'name': '年龄',
-                'key': 'id',
+                'type': 'date',
+                'name': '入职时间',
+                'key': 'hiredate',
+            },
+            {
+                'type': 'text',
+                'name': '邮箱',
+                'key': 'email',
             },
         ]
 
