@@ -187,12 +187,14 @@ class User(BaseModel, PermOwnerMixin):
             return True
         if UserPerm.valid_objects.filter(owner=self, perm=perm, status=1).exists():
             return True
+        if UserPerm.valid_objects.filter(owner=self, perm=perm, status=-1).exists():
+            return False
         for dept in self.depts:
-            if DeptPerm.valid_objects.filter(owner=dept, perm=perm, status=1).exists():
+            if DeptPerm.valid_objects.filter(owner=dept, perm=perm, value=1).exists():
                 return True
         for group in self.groups:
-            if GroupPerm.valid_objects.filter(owner=group, perm=perm, status=1).exists():
-                return True
+            if GroupPerm.valid_objects.filter(owner=group, perm=perm, value=1).exists():
+            return True
         return False
 
     def get_perm(self, perm):
