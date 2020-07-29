@@ -5,13 +5,14 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;安装 `python3`     
 ### 三、使用方法      
 1. 将 `addaccounts.py` 文件保存到本地    
-2. 打开文件，修改文件中常量 `localhost` 的值为本地 IP 或 ArkID 域名
+2. 打开文件，修改文件中常量 `localhost` 的值为本地 IP 或 ArkID 域名   
 ```
 localhost = '192.168.200.115:8989'
 ```  
-3. 修改第25行调用 `login` 函数的参数，第一个参数为密码，第二个参数为用户名                    
+3. 修改 `password` 和 `username` 的值为登录账号和密码    
 ```
-token = login("admin","admin")
+password = 'admin'      #登录账号和密码
+username = 'admin'
 ```
 4. 修改文件最后的 `range` 函数的第二个参数值为想要添加的账号个数    
 ```
