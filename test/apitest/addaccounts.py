@@ -2,10 +2,12 @@ import requests,urllib,demjson
 import random,string
 import json
 
-localhost = '192.168.200.115:8989'
+localhost = '192.168.3.87:8989'
+password = 'admin'      #登录账号和密码
+username = 'admin'
 
-def login(password,username):         #提取登录后的token
-    url = 'http://'+ localhost + '/siteapi/oneid/ucenter/login/'
+def login():         #提取登录后的token
+    url = 'http://{}/siteapi/oneid/ucenter/login/'.format(localhost)
 
     headers = {
         'Content-Type': 'application/json;charset=UTF-8'
@@ -22,7 +24,7 @@ def login(password,username):         #提取登录后的token
     token = response.json()['token']
     return token
 
-token = login("admin","admin")
+token = login()
 
 def create_email(randomlength=10):
     #生成邮箱
@@ -59,7 +61,7 @@ def create_username(randomlength=6):
 
 def getd_root():
 
-    url = 'http://'+ localhost + '/siteapi/oneid/node/d_root/list/'
+    url = 'http://{}/siteapi/oneid/node/d_root/list/'.format(localhost)
 
     headers = {
         'Authorization': "token " + token,
@@ -74,7 +76,7 @@ def getd_root():
 
 def getg_role():
 
-    url = 'http://'+ localhost + '/siteapi/oneid/node/g_role/list/'
+    url = 'http://{}/siteapi/oneid/node/g_role/list/'.format(localhost)
 
     headers = {
         'Authorization': "token " + token,
@@ -90,7 +92,7 @@ def getg_role():
 
 def getg_label():
 
-    url = 'http://'+ localhost + '/siteapi/oneid/node/g_label/list/'
+    url = 'http://{}/siteapi/oneid/node/g_label/list/'.format(localhost)
 
     headers = {
         'Authorization': "token " + token,
@@ -106,7 +108,7 @@ def getg_label():
 
 def getg_personal():
 
-    url = 'http://'+ localhost + '/siteapi/oneid/meta/node/'
+    url = 'http://{}/siteapi/oneid/meta/node/'.format(localhost)
 
     headers = {
         'Authorization': "token " + token,
@@ -125,7 +127,7 @@ node = getg_personal()
 
 def getPergroup(node, x):
 
-    url = 'http://'+ localhost + '/siteapi/oneid/node/'+node[x]+'/list/'
+    url = 'http://{}/siteapi/oneid/node/{}/list/'.format(localhost,node[x])
 
     headers = {
         'Authorization': "token " + token,
@@ -152,25 +154,68 @@ def select_uids():      #随机选择分组
     label = getg_label()
 
     uidroot = root
-    a1 = uidroot[0]
-    a11 = random.sample(uidroot, 1)
-    b1 = random.sample(uidroot, 2)
-    c1 = random.sample(uidroot, 3)
+
+    if len(uidroot) == 0:
+        a1 = None
+        a11 = []
+        b1 = []
+        c1 = []
+    elif 0< len(uidroot) <= 2:
+        a1 = uidroot[0]
+        a11 = random.sample(uidroot, 1)
+        b1 = []
+        c1 = []
+    else:
+        a1 = uidroot[0]
+        a11 = random.sample(uidroot, 1)
+        b1 = random.sample(uidroot, 2)
+        c1 = random.sample(uidroot, 3)
     d1 = [a11,b1,c1]
     d11 = random.choice(d1)
         #部门分类组合
 
     uidrole = role          #角色分类
-    a2 = random.choice(uidrole)
-    a22 = random.sample(uidrole,1)
+
+    if len(uidrole) == 0:
+        a2 = []
+        a22 = []
+    elif len(uidrole) == 1:
+        a2 = random.choice(uidrole)
+        a22 = []
+    else:
+        a2 = random.choice(uidrole)
+        a22 = random.sample(uidrole,1)
 
     uidlabel = label       #标签分类
-    a3 = random.choice(uidlabel)
-    a31 = random.sample(uidlabel,1)
-    b3 = random.sample(uidlabel,2)
-    c3 = random.sample(uidlabel,3)
-    d3 = random.sample(uidlabel,4)
-    e3 = random.sample(uidlabel,5)
+
+    if len(uidlabel) == 0:
+        a3 = []
+        a31 = []
+        b3 = []
+        c3 = []
+        d3 = []
+        e3 = []
+    elif len(uidlabel) == 1:
+        a3 = random.choice(uidlabel)
+        a31 = []
+        b3 = []
+        c3 = []
+        d3 = []
+        e3 = []
+    elif 1< len(uidlabel)<=4:
+        a3 = random.choice(uidlabel)
+        a31 = random.sample(uidlabel,1)
+        b3 = []
+        c3 = []
+        d3 = []
+        e3 = []
+    else:
+        a3 = random.choice(uidlabel)
+        a31 = random.sample(uidlabel,1)
+        b3 = random.sample(uidlabel,2)
+        c3 = random.sample(uidlabel,3)
+        d3 = random.sample(uidlabel,4)
+        e3 = random.sample(uidlabel,5)
 
     uidpergroup = pergroup                 #自定义分类
     z = len(uidpergroup)
@@ -213,7 +258,7 @@ def addAccounts():
 
     node_uids = select_uids()
 
-    url = 'http://' + localhost + '/siteapi/oneid/user/'
+    url = 'http://{}/siteapi/oneid/user/'.format(localhost)
 
     headers = {
         'Authorization': "token " + token,
@@ -247,5 +292,5 @@ def addAccounts():
     r = requests.post(url = url,data = data,headers = headers)
     return r
     
-for i in range(0,2000):      #循环调用函数，添加账号,添加的账号数为range函数的第二个参数值
+for i in range(0,2):      #循环调用函数，添加账号,添加的账号数为range函数的第二个参数值
     addAccounts()
